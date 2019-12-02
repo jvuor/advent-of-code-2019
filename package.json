@@ -8,7 +8,8 @@
     "test": "jest --config ./jest.config.js",
     "1": "tsc && node dist/1/index.js",
     "2": "tsc && node dist/2/index.js",
-    "3": "tsc && node dist/3/index.js"
+    "3": "tsc && node dist/3/index.js",
+    "4": "tsc && node dist/4/index.js"
   },
   "author": "",
   "license": "ISC",

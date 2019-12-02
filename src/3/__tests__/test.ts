@@ -1,4 +1,4 @@
-import { test as opTest } from '../index';
+import { test as opTest } from '../intcode-computer';
 
 describe('intcode operator unit tests', () => {
   test('check results', () => {
