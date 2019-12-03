@@ -6,8 +6,10 @@
     "jsRules": {},
     "rules": {
       "arrow-parens": false,
+      "interface-name": false,
       "no-console": false,
       "no-var-requires": false,
+      "prefer-for-of": false,
       "quotemark": [ true, "single" ]
     },
     "rulesDirectory": []
