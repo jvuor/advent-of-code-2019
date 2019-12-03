@@ -10,7 +10,8 @@
     "2": "tsc && node dist/2/index.js",
     "3": "tsc && node dist/3/index.js",
     "4": "tsc && node dist/4/index.js",
-    "5": "tsc && node dist/5/index.js"
+    "5": "tsc && node dist/5/index.js",
+    "6": "tsc && node dist/6/index.js"
   },
   "author": "",
   "license": "ISC",
