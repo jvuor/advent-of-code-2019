@@ -11,7 +11,8 @@
     "3": "tsc && node dist/3/index.js",
     "4": "tsc && node dist/4/index.js",
     "5": "tsc && node dist/5/index.js",
-    "6": "tsc && node dist/6/index.js"
+    "6": "tsc && node dist/6/index.js",
+    "day4": "tsc && node dist/day4/index.js"
   },
   "author": "",
   "license": "ISC",
