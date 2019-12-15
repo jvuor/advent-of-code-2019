@@ -6,13 +6,14 @@
   "scripts": {
     "add": "tsc && node dist/index.js",
     "test": "jest --config ./jest.config.js",
-    "1": "tsc && node dist/1/index.js",
-    "2": "tsc && node dist/2/index.js",
-    "3": "tsc && node dist/3/index.js",
-    "4": "tsc && node dist/4/index.js",
-    "5": "tsc && node dist/5/index.js",
-    "6": "tsc && node dist/6/index.js",
-    "day4": "tsc && node dist/day4/index.js"
+    "1": "tsc && node dist/day1/1/index.js",
+    "2": "tsc && node dist/day1/2/index.js",
+    "3": "tsc && node dist/day2/3/index.js",
+    "4": "tsc && node dist/day2/4/index.js",
+    "5": "tsc && node dist/day3/5/index.js",
+    "6": "tsc && node dist/day3/6/index.js",
+    "day4": "tsc && node dist/day4/index.js",
+    "day5": "tsc && node dist/day5/index.js"
   },
   "author": "",
   "license": "ISC",

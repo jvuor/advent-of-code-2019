@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { operate, parseIntcode } from '../3/intcode-computer';
+import { operate, parseIntcode } from '../../shared/intcode-computer';
 
 function run(code: string): void {
   const startCode = parseIntcode(code);
@@ -19,5 +19,5 @@ function run(code: string): void {
   }
 }
 
-const data = fs.readFileSync('src/3/input.txt', { encoding: 'utf8' });
+const data = fs.readFileSync('src/day2/3/input.txt', { encoding: 'utf8' });
 run(data);

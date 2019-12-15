@@ -1,6 +1,6 @@
-import { test as opTest } from '../intcode-computer';
+import { test as opTest } from '../../shared/intcode-computer';
 
-describe('intcode operator unit tests', () => {
+describe('intcode operator unit tests, day 3', () => {
   test('check results', () => {
     const match = (testCode: string, expectedResult: string) => {
       const result = opTest(testCode);
