@@ -4,14 +4,14 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "add": "tsc && node dist/index.js",
-    "test": "jest --config ./jest.config.js",
     "1": "tsc && node dist/day1/1/index.js",
     "2": "tsc && node dist/day1/2/index.js",
     "3": "tsc && node dist/day2/3/index.js",
     "4": "tsc && node dist/day2/4/index.js",
     "5": "tsc && node dist/day3/5/index.js",
     "6": "tsc && node dist/day3/6/index.js",
+    "add": "tsc && node dist/index.js",
+    "test": "jest --config ./jest.config.js",
     "day4": "tsc && node dist/day4/index.js",
     "day5": "tsc && node dist/day5/index.js"
   },
@@ -23,10 +23,14 @@
     "@babel/preset-typescript": "^7.7.4",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.14",
+    "@types/readline-sync": "^1.4.3",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.2.0",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
   }
 }
