@@ -63,6 +63,36 @@ function operate(startCode: number[]): number[] {
         console.log('Output: ', output);
         pointer += 2;
         break;
+      case 5:
+        if (get(pointer + 1, mode1) !== 0) {
+          pointer = get(pointer + 2, mode2);
+        } else {
+          pointer += 3;
+        }
+        break;
+      case 6:
+        if (get(pointer + 1, mode1) === 0) {
+          pointer = get(pointer + 2, mode2);
+        } else {
+          pointer += 3;
+        }
+        break;
+      case 7:
+        if (get(pointer + 1, mode1) < get(pointer + 2, mode2)) {
+          set(pointer + 3, 1);
+        } else {
+          set(pointer + 3, 0);
+        }
+        pointer += 4;
+        break;
+      case 8:
+        if (get(pointer + 1, mode1) === get(pointer + 2, mode2)) {
+          set(pointer + 3, 1);
+        } else {
+          set(pointer + 3, 0);
+        }
+        pointer += 4;
+        break;
       case 99:
         execute = false;
         break;
