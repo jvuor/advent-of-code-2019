@@ -1,4 +1,5 @@
 import * as readlineSync from 'readline-sync';
+import { IntcodeConfig, IntcodeOutput } from './interfaces';
 
 function parseIntcode(code: string): number[] {
   return code
@@ -20,9 +21,28 @@ function getModes(instruction: number): number[] {
   ];
 }
 
-function operate(startCode: number[]): number[] {
-  const intcode = [...startCode];
+function getInputFromConsole(): number {
+  // using a library for input here because the default node readline is async
+  while (true) {
+    const inputText = readlineSync.question('Input: ');
+    const input = parseInt(inputText, 10);
+    if (!isNaN(input)) {
+      return input;
+    } else {
+      console.log('Error, not a number');
+    }
+  }
+}
+
+function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput {
   let pointer = 0;
+
+  if (config.state?.pointer) {
+    pointer = config.state.pointer;
+  }
+
+  const intcode = [...startCode];
+  const outputs: number[] = [];
   let execute = true;
 
   const set = (addr: number, value: number) => {
@@ -43,25 +63,26 @@ function operate(startCode: number[]): number[] {
         pointer += 4;
         break;
       case 3:
-        // using a library for input here because the default node readline is async
-        let inputAccepted = false;
-        let input = 0;
-        while (!inputAccepted) {
-          const inputText = readlineSync.question('Input: ');
-          input = parseInt(inputText, 10);
-          if (!isNaN(input)) {
-            inputAccepted = true;
-          } else {
-            console.log('Error, not a number');
-          }
-        }
+        const input = config.inputs
+         ? config.inputs.splice(0, 1)[0]
+         : getInputFromConsole();
         set(pointer + 1, input);
         pointer += 2;
         break;
       case 4:
         const output = get(pointer + 1, mode1);
-        console.log('Output: ', output);
+        outputs.push(output);
         pointer += 2;
+        if (config.interruptOnOutput) {
+          return {
+            code: intcode,
+            complete: false,
+            output: outputs,
+            pointer,
+          };
+        } else if (!config.noOutputToConsole) {
+          console.log('Output: ', output);
+        }
         break;
       case 5:
         if (get(pointer + 1, mode1) !== 0) {
@@ -96,14 +117,21 @@ function operate(startCode: number[]): number[] {
       case 99:
         execute = false;
         break;
+      default:
+        throw new Error('Unknown operation, intcode processing halted');
     }
   }
 
-  return intcode;
+  return {
+    code: intcode,
+    complete: true,
+    output: outputs,
+    pointer,
+  };
 }
 
-function test(code: string) {
-  return operate(parseIntcode(code));
+function test(code: string, config: IntcodeConfig = {}) {
+  return operate(parseIntcode(code), config);
 }
 
 export { test, parseIntcode, operate, getModes };

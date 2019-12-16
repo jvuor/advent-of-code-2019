@@ -14,7 +14,8 @@
     "test": "jest --config ./jest.config.js",
     "day4": "tsc && node dist/day4/index.js",
     "day5": "tsc && node dist/day5/index.js",
-    "day6": "tsc && node dist/day6/index.js"
+    "day6": "tsc && node dist/day6/index.js",
+    "day7": "tsc && node dist/day7/index.js"
   },
   "author": "",
   "license": "ISC",

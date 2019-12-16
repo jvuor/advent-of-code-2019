@@ -9,7 +9,14 @@ jest.mock('readline-sync', () => ({
 describe('intcode operator unit tests, day 3', () => {
   const match = (testCode: string, expectedResult: string) => {
     const result = opTest(testCode);
-    const formattedResult = result.join(',');
+    const formattedResult = result.code.join(',');
+    expect(result.complete).toBe(true);
+    expect(formattedResult).toMatch(expectedResult);
+  };
+  const matchOutputs = (testCode: string, inputs: number[], expectedResult: string) => {
+    const result = opTest(testCode, { inputs, noOutputToConsole: true });
+    const formattedResult = result.output.join(',');
+    expect(result.complete).toBe(true);
     expect(formattedResult).toMatch(expectedResult);
   };
 
@@ -28,6 +35,10 @@ describe('intcode operator unit tests, day 3', () => {
 
   test('input test, day 5', () => {
     match('3,0,4,0,99', '1,0,4,0,99');
+  });
+
+  test('input tests, day 7', () => {
+    matchOutputs('3,0,4,0,99', [1], '1');
   });
 });
 

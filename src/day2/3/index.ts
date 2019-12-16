@@ -5,7 +5,7 @@ function run(code: string): void {
   const intcode = parseIntcode(code);
   intcode[1] = 12;
   intcode[2] = 2;
-  const result = operate(intcode);
+  const result = operate(intcode).code;
   console.log('result: ', result[0]);
 }
 

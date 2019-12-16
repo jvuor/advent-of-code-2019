@@ -9,9 +9,9 @@ function run(code: string): void {
       const intcode = [...startCode];
       intcode[1] = noun;
       intcode[2] = verb;
-      const result = operate(intcode);
+      const result = operate(intcode).code[0];
 
-      if (result[0] === 19690720) {
+      if (result === 19690720) {
         console.log('result:', 100 * noun + verb);
         return;
       }
