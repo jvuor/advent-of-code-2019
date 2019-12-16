@@ -1,4 +1,4 @@
-import { parseMap } from '../orbit-map';
+import { parseMap, solveDistance } from '../orbit-map';
 
 describe('orbit map unit tests', () => {
   test('expected output', () => {
@@ -42,5 +42,25 @@ describe('orbit map unit tests', () => {
       K)L`;
 
     expect(() => parseMap(brokenMap)).toThrow();
+  });
+});
+
+describe('orbit distance unit tests', () => {
+  test('expected results', () => {
+    const testMap = `COM)B
+      B)C
+      C)D
+      D)E
+      E)F
+      B)G
+      G)H
+      D)I
+      E)J
+      J)K
+      K)L
+      K)YOU
+      I)SAN`;
+
+    expect(solveDistance(testMap, 'YOU', 'SAN')).toBe(4);
   });
 });

@@ -1,7 +1,7 @@
 export class Orbiter {
-  public name: string;
+  public readonly name: string;
   public readonly orbits: number;
-  private parent: Orbiter | null;
+  public readonly parent: Orbiter | null;
 
   public constructor(name: string, parent: Orbiter | null) {
     this.name = name;
