@@ -38,3 +38,10 @@ export function checkImageData(data: string, width: number, height: number) {
 
   return countDigits(layerWithLeastZeros, 1) * countDigits(layerWithLeastZeros, 2);
 }
+
+export function decodeImage(data: string, width: number, height: number) {
+  const image = parseImage(data, width, height);
+  const result = image.decodeImage();
+
+  console.log(result);
+}

@@ -42,6 +42,33 @@ export class Image {
     console.log(rows.join('\n'));
   }
 
+  public decodeImage(): string {
+    const rows: string[] = [];
+
+    for (let y = 0; y < this.height; y++) {
+      let row = '';
+      for (let x = 0; x < this.width; x++) {
+        let layer = 0;
+        let foundPixel = false;
+
+        while (!foundPixel) {
+          const pixel = this.pixels.find(p => p.layer === layer && p.x === x && p.y === y);
+          if (pixel && pixel.value !== 2) {
+            row += `${pixel.value}`;
+            foundPixel = true;
+          } else {
+            layer++;
+          }
+        }
+      }
+      rows.push(row);
+    }
+
+    return rows
+      .map(row => row.split('').map(char => char === '0' ? ' ' : '#').join(''))
+      .join('\n');
+  }
+
   private getX(): number {
     const returnValue = this.nextX;
     this.incrementX();
