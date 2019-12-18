@@ -36,40 +36,73 @@ function getInputFromConsole(): number {
 
 function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput {
   let pointer = 0;
+  let relativeBase = 0;
 
-  if (config.state?.pointer) {
+  if (config.state) {
     pointer = config.state.pointer;
+    relativeBase = config.state.relativeBase;
   }
 
   const intcode = [...startCode];
   const outputs: number[] = [];
   let execute = true;
 
-  const set = (addr: number, value: number) => {
-    intcode[intcode[addr]] = value;
+  const set = (addr: number, value: number, mode: number) => {
+    switch (mode) {
+      case 0:
+        intcode[intcode[addr]] = value;
+        return;
+      case 1:
+        throw new Error('Writing in immediate mode is not allowed');
+      case 2:
+        intcode[intcode[addr] + relativeBase] = value;
+        return;
+      default:
+        throw new Error('Illegal mode setting');
+    }
   };
 
-  const get = (addr: number, mode: number): number => mode ? intcode[addr] : intcode[intcode[addr]];
+  const get = (addr: number, mode: number): number => {
+    const nullCheck = (value: number) => isNaN(value) ? 0 : value;
+
+    switch (mode) {
+      case 0:
+        // position mode: value is a memory address for the fetched value
+        return nullCheck(intcode[intcode[addr]]);
+      case 1:
+        // immediate mode: value is a read from directly from the memory address
+        return nullCheck(intcode[addr]);
+      case 2:
+        // relative mode: like position mode but gives the memory address as relative value
+        return nullCheck(intcode[intcode[addr] + relativeBase]);
+      default:
+        throw new Error('Illegal mode setting');
+    }
+  };
 
   while (execute) {
     const [ operation, mode1, mode2, mode3 ] = getModes(intcode[pointer]);
     switch (operation) {
       case 1:
-        set(pointer + 3, get(pointer + 1, mode1) + get(pointer + 2, mode2));
+        // add
+        set(pointer + 3, get(pointer + 1, mode1) + get(pointer + 2, mode2), mode3);
         pointer += 4;
         break;
       case 2:
-        set(pointer + 3, get(pointer + 1, mode1) * get(pointer + 2, mode2));
+        // multiply
+        set(pointer + 3, get(pointer + 1, mode1) * get(pointer + 2, mode2), mode3);
         pointer += 4;
         break;
       case 3:
+        // input
         const input = config.inputs
          ? config.inputs.splice(0, 1)[0]
          : getInputFromConsole();
-        set(pointer + 1, input);
+        set(pointer + 1, input, mode1);
         pointer += 2;
         break;
       case 4:
+        // output
         const output = get(pointer + 1, mode1);
         outputs.push(output);
         pointer += 2;
@@ -79,12 +112,14 @@ function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput
             complete: false,
             output: outputs,
             pointer,
+            relativeBase,
           };
         } else if (!config.noOutputToConsole) {
           console.log('Output: ', output);
         }
         break;
       case 5:
+        // jump-if-true
         if (get(pointer + 1, mode1) !== 0) {
           pointer = get(pointer + 2, mode2);
         } else {
@@ -92,6 +127,7 @@ function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput
         }
         break;
       case 6:
+        // jump-if-false
         if (get(pointer + 1, mode1) === 0) {
           pointer = get(pointer + 2, mode2);
         } else {
@@ -99,22 +135,30 @@ function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput
         }
         break;
       case 7:
+        // less than
         if (get(pointer + 1, mode1) < get(pointer + 2, mode2)) {
-          set(pointer + 3, 1);
+          set(pointer + 3, 1, mode3);
         } else {
-          set(pointer + 3, 0);
+          set(pointer + 3, 0, mode3);
         }
         pointer += 4;
         break;
       case 8:
+        // equals
         if (get(pointer + 1, mode1) === get(pointer + 2, mode2)) {
-          set(pointer + 3, 1);
+          set(pointer + 3, 1, mode3);
         } else {
-          set(pointer + 3, 0);
+          set(pointer + 3, 0, mode3);
         }
         pointer += 4;
         break;
+      case 9:
+        // adjust relative base
+        relativeBase += get(pointer + 1, mode1);
+        pointer += 2;
+        break;
       case 99:
+        // end
         execute = false;
         break;
       default:
@@ -127,6 +171,7 @@ function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput
     complete: true,
     output: outputs,
     pointer,
+    relativeBase,
   };
 }
 

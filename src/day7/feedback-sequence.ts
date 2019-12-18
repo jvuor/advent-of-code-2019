@@ -29,7 +29,7 @@ export function getFeedbackSignal(intcode: string): number {
           inputs: [...input],
           interruptOnOutput: true,
           noOutputToConsole: true,
-          state: { pointer },
+          state: { pointer, relativeBase: 0 },
         });
 
         previousStates[amplifier] = output;
