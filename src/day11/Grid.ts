@@ -5,8 +5,8 @@ export class Grid {
   private currentX: number;
   private currentY: number;
 
-  public constructor() {
-    this.squares = [{ x: 0, y: 0, color: Color.Black, painted: false }];
+  public constructor(initialColor: Color = Color.Black) {
+    this.squares = [{ x: 0, y: 0, color: initialColor, painted: false }];
     this.currentX = 0;
     this.currentY = 0;
   }
@@ -60,14 +60,8 @@ export class Grid {
     for (let y = minY; y <= maxY; ++y) {
       for (let x = minX; x <= maxX; ++x) {
         const square = this.squares.find(sq => sq.x === x && sq.y === y);
-        const color = square ? square.color : Color.white;
-        if (!square) {
-          output += ' ';
-        } else if (color === Color.Black) {
-          output += '.';
-        } else if (color === Color.white) {
-          output += '#';
-        }
+        const color = square ? square.color : Color.Black;
+        output += color === Color.white ? '#' : '.';
       }
       output += '\n';
     }

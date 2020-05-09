@@ -10,13 +10,15 @@ export class Robot {
   private grid: Grid;
   private previousOpComputerState: null | IntcodeState;
   private complete: boolean;
+  private part: number;
 
-  constructor(code: string) {
+  constructor(code: string, part: number) {
     this.opCode = parseIntcode(code);
     this.direction = Direction.Up;
-    this.grid = new Grid();
+    this.grid = new Grid(part === 1 ? Color.Black : Color.white);
     this.previousOpComputerState = null;
     this.complete = false;
+    this.part = part;
   }
 
   public run(): void {
@@ -31,9 +33,12 @@ export class Robot {
         this.direction = step.direction;
         this.grid.moveToSquare(step);
       }
-      // this.grid.output();
     }
-    console.log(this.grid.countPaintedSquares());
+    if (this.part === 1) {
+      console.log(`Total painted squares: ${this.grid.countPaintedSquares()}`);
+    } else if (this.part === 2) {
+      this.grid.output();
+    }
   }
 
   public step(): number {
