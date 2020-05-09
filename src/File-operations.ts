@@ -44,18 +44,8 @@ export class FileOperations {
   }
 
   public addStartScript(name: string): void {
-    // There are way better automated ways to do this
-    const packageJsonContents = fs.readFileSync('package.json', { encoding: 'utf8' });
-    const scripts = packageJsonContents.indexOf('scripts');
-    const scriptsStart = packageJsonContents.indexOf('{', scripts);
-    const scriptsEnd = packageJsonContents.indexOf('}', scriptsStart);
-    const lastScriptPos = packageJsonContents.slice(scriptsStart, scriptsEnd).lastIndexOf('"') + scriptsStart;
-
-    const scriptToInsert = `,\n    "${name}": "tsc && node dist/${name}/index.js"`;
-    const newPackageJson = packageJsonContents.substring(0, lastScriptPos + 1)
-      + scriptToInsert
-      + packageJsonContents.substring(lastScriptPos + 1);
-
-    fs.writeFileSync('package.json', newPackageJson, { encoding: 'utf8' });
+    const packageJson = JSON.parse(fs.readFileSync('package.json', { encoding: 'utf8' }));
+    packageJson.scripts[name] = `tsc && node dist/${name}/index.js`;
+    fs.writeFileSync('package.json', JSON.stringify(packageJson, null, '  '), { encoding: 'utf8' });
   }
 }
