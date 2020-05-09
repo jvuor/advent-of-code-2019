@@ -1,4 +1,5 @@
 import { Moon, Moons } from './interfaces';
+import { lcm } from './utils/lcm';
 
 export class GravitySystem {
   private moons: Moons;
@@ -34,6 +35,51 @@ export class GravitySystem {
 
   public getSteps(): number {
     return this.steps;
+  }
+
+  public getRepeats(): void {
+    let repeatX: number | null = null;
+    let repeatY: number | null = null;
+    let repeatZ: number | null = null;
+
+    while (!repeatX || !repeatY || !repeatZ) {
+      this.step();
+      if (!repeatX) {
+        let allAtZero = true;
+        this.moons.forEach(moon => {
+          if (moon.velocity.x !== 0) {
+            allAtZero = false;
+          }
+        });
+        if (allAtZero) {
+          repeatX = 2 * this.steps;
+        }
+      }
+      if (!repeatY) {
+        let allAtZero = true;
+        this.moons.forEach(moon => {
+          if (moon.velocity.y !== 0) {
+            allAtZero = false;
+          }
+        });
+        if (allAtZero) {
+          repeatY = 2 * this.steps;
+        }
+      }
+      if (!repeatZ) {
+        let allAtZero = true;
+        this.moons.forEach(moon => {
+          if (moon.velocity.z !== 0) {
+            allAtZero = false;
+          }
+        });
+        if (allAtZero) {
+          repeatZ = 2 * this.steps;
+        }
+      }
+    }
+
+    console.log(`Repeats after ${lcm([repeatX, repeatY, repeatZ])} steps.`);
   }
 
   private parseInitialPositions(input: string): Moons {

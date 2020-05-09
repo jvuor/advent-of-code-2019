@@ -7,3 +7,6 @@ while (system.getSteps() < 1000) {
   system.step();
 }
 system.output();
+
+const system2 = new GravitySystem(input);
+system2.getRepeats();
