@@ -10,7 +10,8 @@
       "no-console": false,
       "no-var-requires": false,
       "prefer-for-of": false,
-      "quotemark": [ true, "single" ]
+      "quotemark": [ true, "single" ],
+      "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }
