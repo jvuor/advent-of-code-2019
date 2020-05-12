@@ -3,6 +3,7 @@ import { ReactionParser } from '../Reaction-Parser';
 interface TestInput {
   input: string;
   ore: number;
+  maxFuel?: number;
 }
 
 const inputs: TestInput[] = [
@@ -29,6 +30,7 @@ const inputs: TestInput[] = [
   },
   {
     ore: 13312,
+    maxFuel: 82892753,
     input: `
       157 ORE => 5 NZVS
       165 ORE => 6 DCFZ
@@ -42,6 +44,7 @@ const inputs: TestInput[] = [
   },
   {
     ore: 180697,
+    maxFuel: 5586022,
     input: `2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
       17 NVRVD, 3 JNWZP => 8 VPVL
       53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV => 1 FUEL
@@ -57,6 +60,7 @@ const inputs: TestInput[] = [
   },
   {
     ore: 2217126, // The AoC page says 2210736 but that's not what my parser says and it passed so w/e
+    maxFuel: 460664,
     input: `
       171 ORE => 8 CNZTR
       7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP => 4 PLWSL
@@ -87,5 +91,17 @@ describe('parser unit tests', () => {
     };
 
     inputs.forEach(testExecution);
+  });
+
+  test('max fuel tests', () => {
+    const testExecution = (input: TestInput) => {
+      const parser = new ReactionParser(input.input);
+      const solution = parser.solveMaximized();
+      expect(solution).toBe(input.maxFuel);
+    };
+
+    inputs
+      .filter(input => input.maxFuel)
+      .forEach(testExecution);
   });
 });

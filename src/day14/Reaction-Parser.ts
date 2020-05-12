@@ -1,4 +1,4 @@
-import { MaterialDraftList, MaterialList, Reactant, Reaction, Material, MaterialShoppingList } from './interfaces';
+import { MaterialDraftList, MaterialList, MaterialShoppingList, Reactant, Reaction } from './interfaces';
 
 export class ReactionParser {
   private reactions: Reaction[];
@@ -8,14 +8,56 @@ export class ReactionParser {
     this.reactions = this.parseInput(input);
   }
 
-  public solveForOre(): number {
+  public solveMaximized(): number {
+    const maxFuel = 1000000000000;
+    const solutionForOne = this.solveForOre(1);
+    let guess = Math.floor(maxFuel / solutionForOne);
+
+    let currentMin = 0;
+    let currentMinSolution = 0;
+    let currentMax = Infinity;
+    let currentMaxSolution = Infinity;
+
+    let step = 1;
+    while (currentMax !== currentMin + 1 && step ++ < 200) {
+      const solution = this.solveForOre(guess);
+      if (solution < maxFuel && solution > currentMinSolution) {
+        currentMin = guess;
+        currentMinSolution = solution;
+      }
+      if (solution > maxFuel && solution < currentMaxSolution) {
+        currentMax = guess;
+        currentMaxSolution = solution;
+      }
+      if (solution > maxFuel) {
+        if (currentMin === 0) {
+          guess = Math.floor(guess / 2);
+        } else {
+          const difference = Math.ceil((currentMax - currentMin) / 2);
+          guess -= difference;
+        }
+      }
+      if (solution < maxFuel) {
+        if (currentMax === Infinity) {
+          guess = guess * 2;
+        } else {
+          const difference = Math.ceil((currentMax - currentMin) / 2);
+          guess += difference;
+        }
+      }
+    }
+
+    return currentMin;
+  }
+
+  public solveForOre(fuelAmount: number = 1): number {
     const fuel = this.materials.find(mat => mat.name === 'FUEL');
     const ore = this.materials.find(mat => mat.name === 'ORE');
     if (!fuel || !ore) {
       throw new Error('Cannot find FUEL or ORE');
     }
 
-    let shoppingList: MaterialShoppingList[] = [{ material: fuel, amount: 1 }];
+    let shoppingList: MaterialShoppingList[] = [{ material: fuel, amount: fuelAmount }];
 
     while (shoppingList.some(reactant => reactant.material !== ore )) {
       const maxDistance = shoppingList
