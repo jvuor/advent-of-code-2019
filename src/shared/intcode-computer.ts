@@ -95,6 +95,21 @@ function operate(startCode: number[], config: IntcodeConfig = {}): IntcodeOutput
         break;
       case 3:
         // input
+
+        if (config.interruptOnInput && config.inputs?.length === 0) {
+          return {
+            code: intcode,
+            complete: false,
+            output: outputs,
+            pointer,
+            relativeBase,
+          };
+        }
+
+        if (config.inputs && config.inputs.length === 0) {
+          throw new Error('Out of inputs');
+        }
+
         const input = config.inputs
          ? config.inputs.splice(0, 1)[0]
          : getInputFromConsole();

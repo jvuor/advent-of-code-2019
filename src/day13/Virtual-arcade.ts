@@ -1,38 +1,34 @@
 import { operate } from '../shared/intcode-computer';
 import { IntcodeConfig, IntcodeOutput } from '../shared/interfaces';
 import { ControlInput, Sprite } from './interfaces';
-import { Joystick } from './Joystick';
+import { RobotPlayer } from './Robot-Player';
 import { Screen } from './Screen';
 import { controlMap } from './utils/controls-map';
+import { VirtualScreen } from './Virtual-screen';
 
-export class Arcade {
+export class VirtualArcade {
   private opCode: number[];
   private screen: Screen;
-  private joystick: Joystick;
+  private virtualScreen: VirtualScreen;
+  private robotPlayer: RobotPlayer;
   private gameLoop: NodeJS.Timeout | null = null;
   private state: IntcodeOutput | null = null;
 
   public constructor(opCode: number[]) {
     this.opCode = opCode;
     this.screen = new Screen();
-    this.joystick = new Joystick();
-  }
-
-  public testRun(): void {
-    const state = operate(this.opCode, { noOutputToConsole: true });
-    this.outputToScreen(state.output);
-    this.screen.end(true);
+    this.virtualScreen = new VirtualScreen();
+    this.robotPlayer = new RobotPlayer(this.screen, this.virtualScreen);
   }
 
   public async run(): Promise<any> {
     // insert coin:
     this.opCode[0] = 2;
-    this.gameLoop = setInterval(() => this.step(), 500);
+    this.gameLoop = setInterval(() => this.step(), 20);
   }
 
   private step(): void {
-    const inputFromJoystick = this.joystick.poll();
-    const input = controlMap.get(inputFromJoystick) as ControlInput;
+    const input = this.robotPlayer.getInput();
 
     let opCode: number[] = [];
     const config: IntcodeConfig = {
@@ -54,7 +50,6 @@ export class Arcade {
     if (this.state.complete && this.gameLoop) {
       clearInterval(this.gameLoop);
       this.screen.end();
-      this.joystick.end();
       process.exit();
     }
   }
@@ -72,6 +67,7 @@ export class Arcade {
       const sprite: Sprite = output[pointer + 2];
 
       this.screen.draw(x, y, sprite);
+      this.virtualScreen.draw(x, y, sprite);
     }
   }
 }
