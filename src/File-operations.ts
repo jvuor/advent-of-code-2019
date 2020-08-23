@@ -46,6 +46,6 @@ export class FileOperations {
   public addStartScript(name: string): void {
     const packageJson = JSON.parse(fs.readFileSync('package.json', { encoding: 'utf8' }));
     packageJson.scripts[name] = `tsc && node dist/${name}/index.js`;
-    fs.writeFileSync('package.json', JSON.stringify(packageJson, null, '  '), { encoding: 'utf8' });
+    fs.writeFileSync('package.json', `${JSON.stringify(packageJson, null, '  ')}\n`, { encoding: 'utf8' });
   }
 }
