@@ -14,7 +14,7 @@ export class Solver {
     this.location = { x: 0, y: 0 };
   }
 
-  public solve(): void {
+  public solvePart1(): void {
     // rough outline:
     // 1. find route to closest unknown location
 
@@ -70,6 +70,13 @@ export class Solver {
     // 4. calculate shortest route from 0,0 to system
 
     const solution = this.map.findNearest({ x: 0, y: 0 }, SquareType.System)?.length;
-    console.log('Solution:', solution);
+    console.log('Solution to part 1:', solution);
+  }
+
+  public solvePart2(): void {
+    const spreader = this.map.getOxygenSpreader();
+    spreader.initialize();
+    const solution = spreader.cycleToFull();
+    console.log('Solution to part 2:', solution);
   }
 }

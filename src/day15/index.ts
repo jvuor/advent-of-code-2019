@@ -1,4 +1,5 @@
 import { Solver } from './Solver';
 
 const solver = new Solver;
-solver.solve();
+solver.solvePart1();
+solver.solvePart2();

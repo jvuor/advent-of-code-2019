@@ -1,6 +1,7 @@
 import { Squares, SquareType, Coordinate, Node, NodeSet, Direction } from './interfaces';
 import { getNeighbourCoordinates, getNeighbourRoute } from './utils/neighbours';
 import { MapOutput } from './Map-Output';
+import { OxygenSpreader } from './Oxygen-Spreader';
 
 export class Map {
   private squares: Squares;
@@ -111,6 +112,10 @@ export class Map {
         return currentNode.route;
       }
     }
+  }
+
+  public getOxygenSpreader(): OxygenSpreader {
+    return new OxygenSpreader(this.squares);
   }
 
   private checkSquare(coordinate: Coordinate): SquareType | null {

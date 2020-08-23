@@ -3,4 +3,5 @@ export enum SquareType {
   Empty = '.',
   Unknown = '?',
   System = '$',
+  Oxygen = 'O',
 }
