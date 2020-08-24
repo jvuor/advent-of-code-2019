@@ -23,7 +23,8 @@
     "day12": "tsc && node dist/day12/index.js",
     "day13": "tsc && node dist/day13/index.js",
     "day14": "tsc && node dist/day14/index.js",
-    "day15": "tsc && node dist/day15/index.js"
+    "day15": "tsc && node dist/day15/index.js",
+    "day16": "tsc && node dist/day16/index.js"
   },
   "author": "",
   "license": "ISC",
